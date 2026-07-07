@@ -1,0 +1,7 @@
+vendor/
+*.log
+.env
+.env.*
+.DS_Store
+nbproject/
+conexion.php
