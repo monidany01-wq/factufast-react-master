@@ -13,6 +13,11 @@ function ClienteLogin() {
   const [error, setError] = useState("");
   const [passwordRecuperar, setPasswordRecuperar] = useState("");
   const [confirmarRecuperar, setConfirmarRecuperar] = useState("");
+  const [verPassword, setVerPassword] = useState(false);
+  const [verPasswordNueva, setVerPasswordNueva] = useState(false);
+  const [verConfirmar, setVerConfirmar] = useState(false);
+  const [verPasswordRecuperar, setVerPasswordRecuperar] = useState(false);
+  const [verConfirmarRecuperar, setVerConfirmarRecuperar] = useState(false);
 
   // ESTILOS LOCALES
   const labelStyle = {
@@ -45,6 +50,25 @@ function ClienteLogin() {
     cursor: "pointer",
     fontSize: "15px",
     marginTop: "10px"
+  };
+
+  const inputContainerStyle = {
+    position: "relative",
+    width: "100%",
+    marginBottom: "14px"
+  };
+
+  const ojoBtnStyle = {
+    position: "absolute",
+    right: "10px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    background: "none",
+    border: "none",
+    color: "#C9BD86",
+    cursor: "pointer",
+    fontSize: "12px",
+    fontWeight: "bold"
   };
 
   // VERIFICAR IDENTIDAD — NIT + correo
@@ -229,7 +253,22 @@ function ClienteLogin() {
 />
 
             <label style={labelStyle}>Contraseña</label>
-            <input style={inputStyle} type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Tu contraseña" />
+            <div style={inputContainerStyle}>
+              <input
+                type={verPassword ? "text" : "password"}
+                style={{ ...inputStyle, paddingRight: "75px" }}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="Tu contraseña"
+              />
+              <button
+                type="button"
+                onClick={() => setVerPassword(!verPassword)}
+                style={ojoBtnStyle}
+              >
+                {verPassword ? "Ocultar" : "Mostrar"}
+              </button>
+            </div>
 
             <button onClick={handleLogin} style={btnStyle}>Ingresar</button>
 
@@ -275,10 +314,40 @@ function ClienteLogin() {
         {modo === "crear" && (
           <>
             <label style={labelStyle}>Nueva Contraseña</label>
-            <input style={inputStyle} type="password" value={passwordNueva} onChange={e => setPasswordNueva(e.target.value)} placeholder="Mínimo 4 caracteres" />
+            <div style={inputContainerStyle}>
+              <input
+                type={verPasswordNueva ? "text" : "password"}
+                style={{ ...inputStyle, paddingRight: "75px" }}
+                value={passwordNueva}
+                onChange={e => setPasswordNueva(e.target.value)}
+                placeholder="Mínimo 4 caracteres"
+              />
+              <button
+                type="button"
+                onClick={() => setVerPasswordNueva(!verPasswordNueva)}
+                style={ojoBtnStyle}
+              >
+                {verPasswordNueva ? "Ocultar" : "Mostrar"}
+              </button>
+            </div>
 
             <label style={labelStyle}>Confirmar Contraseña</label>
-            <input style={inputStyle} type="password" value={confirmar} onChange={e => setConfirmar(e.target.value)} placeholder="Repite tu contraseña" />
+            <div style={inputContainerStyle}>
+              <input
+                type={verConfirmar ? "text" : "password"}
+                style={{ ...inputStyle, paddingRight: "75px" }}
+                value={confirmar}
+                onChange={e => setConfirmar(e.target.value)}
+                placeholder="Repite tu contraseña"
+              />
+              <button
+                type="button"
+                onClick={() => setVerConfirmar(!verConfirmar)}
+                style={ojoBtnStyle}
+              >
+                {verConfirmar ? "Ocultar" : "Mostrar"}
+              </button>
+            </div>
 
             <button onClick={handleCrearPassword} style={btnStyle}>Guardar contraseña</button>
           </>
@@ -298,10 +367,40 @@ function ClienteLogin() {
             <input style={inputStyle} type="email" value={correo} onChange={(e) => setCorreo(e.target.value)} placeholder="Tu correo" />
 
             <label style={labelStyle}>Nueva contraseña</label>
-            <input style={inputStyle} type="password" value={passwordRecuperar} onChange={(e) => setPasswordRecuperar(e.target.value)} placeholder="Nueva contraseña" />
+            <div style={inputContainerStyle}>
+              <input
+                type={verPasswordRecuperar ? "text" : "password"}
+                style={{ ...inputStyle, paddingRight: "75px" }}
+                value={passwordRecuperar}
+                onChange={(e) => setPasswordRecuperar(e.target.value)}
+                placeholder="Nueva contraseña"
+              />
+              <button
+                type="button"
+                onClick={() => setVerPasswordRecuperar(!verPasswordRecuperar)}
+                style={ojoBtnStyle}
+              >
+                {verPasswordRecuperar ? "Ocultar" : "Mostrar"}
+              </button>
+            </div>
 
             <label style={labelStyle}>Confirmar contraseña</label>
-            <input style={inputStyle} type="password" value={confirmarRecuperar} onChange={(e) => setConfirmarRecuperar(e.target.value)} placeholder="Confirmar contraseña" />
+            <div style={inputContainerStyle}>
+              <input
+                type={verConfirmarRecuperar ? "text" : "password"}
+                style={{ ...inputStyle, paddingRight: "75px" }}
+                value={confirmarRecuperar}
+                onChange={(e) => setConfirmarRecuperar(e.target.value)}
+                placeholder="Confirmar contraseña"
+              />
+              <button
+                type="button"
+                onClick={() => setVerConfirmarRecuperar(!verConfirmarRecuperar)}
+                style={ojoBtnStyle}
+              >
+                {verConfirmarRecuperar ? "Ocultar" : "Mostrar"}
+              </button>
+            </div>
 
             <button onClick={handleRecuperarPassword} style={btnStyle}>Actualizar contraseña</button>
 

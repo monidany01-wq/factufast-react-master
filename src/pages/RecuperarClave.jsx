@@ -17,6 +17,8 @@ function RecuperarClave() {
   const [mensaje, setMensaje] = useState("");
   const [tipoMensaje, setTipoMensaje] = useState("");
   const [cargando, setCargando] = useState(false);
+  const [verClave, setVerClave] = useState(false);
+  const [verConfirmar, setVerConfirmar] = useState(false);
 
   const limpiarMensaje = () => {
     setMensaje("");
@@ -174,6 +176,25 @@ function RecuperarClave() {
     outline: "none"
   };
 
+  const inputContainerStyle = {
+    position: "relative",
+    width: "100%",
+    marginBottom: "14px"
+  };
+
+  const ojoBtnStyle = {
+    position: "absolute",
+    right: "10px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    background: "none",
+    border: "none",
+    color: "#C9BD86",
+    cursor: "pointer",
+    fontSize: "12px",
+    fontWeight: "bold"
+  };
+
   const btnStyle = {
     width: "100%",
     padding: "12px",
@@ -295,22 +316,40 @@ function RecuperarClave() {
             <div style={{ marginTop: "6px" }}>
 
               <label style={labelStyle}>Nueva contraseña</label>
-              <input
-                type="password"
-                placeholder="Nueva contraseña"
-                value={claveNueva}
-                onChange={(e) => setClaveNueva(e.target.value)}
-                style={inputStyle}
-              />
+              <div style={inputContainerStyle}>
+                <input
+                  type={verClave ? "text" : "password"}
+                  placeholder="Nueva contraseña"
+                  value={claveNueva}
+                  onChange={(e) => setClaveNueva(e.target.value)}
+                  style={{ ...inputStyle, paddingRight: "75px" }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setVerClave(!verClave)}
+                  style={ojoBtnStyle}
+                >
+                  {verClave ? "Ocultar" : "Mostrar"}
+                </button>
+              </div>
 
               <label style={labelStyle}>Confirmar contraseña</label>
-              <input
-                type="password"
-                placeholder="Confirmar contraseña"
-                value={confirmarClave}
-                onChange={(e) => setConfirmarClave(e.target.value)}
-                style={inputStyle}
-              />
+              <div style={inputContainerStyle}>
+                <input
+                  type={verConfirmar ? "text" : "password"}
+                  placeholder="Confirmar contraseña"
+                  value={confirmarClave}
+                  onChange={(e) => setConfirmarClave(e.target.value)}
+                  style={{ ...inputStyle, paddingRight: "75px" }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setVerConfirmar(!verConfirmar)}
+                  style={ojoBtnStyle}
+                >
+                  {verConfirmar ? "Ocultar" : "Mostrar"}
+                </button>
+              </div>
 
               <button
                 onClick={cambiarClave}

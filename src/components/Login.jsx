@@ -7,6 +7,7 @@ function Login(){
 
 const [usuario,setUsuario]=useState("");
 const [contrasena,setContrasena]=useState("");
+const [verContrasena,setVerContrasena]=useState(false);
 
 const navigate=useNavigate();
 
@@ -217,28 +218,43 @@ marginBottom:"6px"
 Contraseña
 </label>
 
-<input
-
-type="password"
-
-value={contrasena}
-
-onChange={(e)=>setContrasena(e.target.value)}
-
-style={{
-width:"100%",
-padding:"11px",
-background:"#3b3b3b",
-border:"1px solid #555",
-borderRadius:"5px",
-color:"#fff",
-marginBottom:"20px",
-boxSizing:"border-box"
-}}
-
-required
-
-/>
+<div style={{ position: "relative", marginBottom: "20px" }}>
+  <input
+    type={verContrasena ? "text" : "password"}
+    value={contrasena}
+    onChange={(e)=>setContrasena(e.target.value)}
+    style={{
+      width:"100%",
+      padding:"11px",
+      background:"#3b3b3b",
+      border:"1px solid #555",
+      borderRadius:"5px",
+      color:"#fff",
+      boxSizing:"border-box",
+      paddingRight:"75px"
+    }}
+    required
+  />
+  <button
+    type="button"
+    onClick={() => setVerContrasena(!verContrasena)}
+    style={{
+      position:"absolute",
+      right:"12px",
+      top:"50%",
+      transform:"translateY(-50%)",
+      background:"none",
+      border:"none",
+      color:"#C9BD86",
+      cursor:"pointer",
+      fontSize:"12px",
+      fontWeight:"bold",
+      padding: 0
+    }}
+  >
+    {verContrasena ? "Ocultar" : "Mostrar"}
+  </button>
+</div>
 
 <button
 
