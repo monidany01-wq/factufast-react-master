@@ -2,20 +2,20 @@ import { useNavigate } from 'react-router-dom';
 
 import logo from '../assets/logo.png';
 import salir from '../assets/salida.png';
+import { clearUsuarioSesion, getUsuarioSesion } from '../utils/session';
 
 function Header() {
 
   const navigate = useNavigate();
 
-  // ✅ Leer del objeto completo
-  const usuarioObj = JSON.parse(localStorage.getItem("usuario") || "{}");
+  const usuarioObj = getUsuarioSesion() || {};
   const nombre = usuarioObj.nombre || "Usuario";
   const rol    = usuarioObj.rol    || "";
 
   const cerrarSesion = () => {
     if (!window.confirm("¿Estás seguro que deseas cerrar sesión?")) return;
-    localStorage.removeItem("usuario");
-    navigate("/", { replace: true });
+    clearUsuarioSesion();
+    navigate("/login", { replace: true });
   };
 
   return (

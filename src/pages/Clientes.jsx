@@ -1,14 +1,12 @@
+/* eslint-disable no-unused-vars */
 import React, {
   useEffect,
   useState,
 } from 'react';
 
 import './Listados.css';
-import { useNavigate } from 'react-router-dom';
 
 function Clientes(){
-
-  const navigate = useNavigate();
 
   const [clientes,setClientes] = useState([]);
   const [busqueda,setBusqueda] = useState("");
@@ -265,11 +263,6 @@ function Clientes(){
   return(
 
     <div className="container">
-
-      {/* 🔥 BOTÓN VOLVER
-      <button onClick={() => navigate("/gerente")}>
-        ⬅ Volver al Panel
-      </button>*/}
 
       <h2>Clientes</h2>
           <p>Administra y consulta la información de los clientes.</p>

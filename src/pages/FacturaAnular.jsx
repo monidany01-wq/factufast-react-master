@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps, no-unused-vars */
 import React, {
+  useCallback,
   useEffect,
   useState,
 } from 'react';
@@ -17,7 +19,7 @@ function FacturaAnular() {
   const [factura, setFactura] = useState(null);
   const [detalle, setDetalle] = useState([]);
 
-  const cargarFactura = () => {
+  const cargarFactura = useCallback(() => {
     fetch(`http://localhost/factufast-api/facturas/detalle.php?id=${id}`)
       .then(res => res.json())
       .then(data => {
@@ -27,11 +29,11 @@ function FacturaAnular() {
       .catch(() => {
         alert("Error cargando factura");
       });
-  };
+  }, [id]);
 
   useEffect(() => {
     cargarFactura();
-  }, [id]);
+  }, [cargarFactura]);
 
   const subtotal = detalle.reduce(
     (acc, item) => acc + (Number(item.precio_unitario || 0) * Number(item.cantidad || 0)),

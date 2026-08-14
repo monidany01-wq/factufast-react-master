@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, {
   useEffect,
   useState,
@@ -20,7 +21,7 @@ const [editando,setEditando]       = useState(false);
 const [idProducto,setIdProducto]   = useState(null);
 const [busqueda,setBusqueda]       = useState("");
 
-const usuarioObj = JSON.parse(localStorage.getItem("usuario") || "{}");
+const usuarioObj = JSON.parse(sessionStorage.getItem("usuario") || "{}");
 const rol        = usuarioObj.rol || "";
 const esGerente  = rol === "Gerente 1";
 const esAdmin    = rol === "Administrador";
@@ -50,48 +51,6 @@ const obtenerProveedores = ()=>{
   fetch("http://localhost/factufast-api/proveedores/listar.php")
   .then(res=>res.json())
   .then(data=>setProveedores(data || []));
-
-};
-
-
-
-const guardarMovimientoInventario = async ({ id_producto, cantidad, tipo, precio_entrada, precio_venta }) => {
-
-  if (!id_producto || !cantidad || Number(cantidad) <= 0) return;
-
-
-  try {
-
-    await fetch("http://localhost/factufast-api/inventario/guardar.php",{
-
-      method:"POST",
-
-      headers:{
-        "Content-Type":"application/json"
-      },
-
-      body:JSON.stringify({
-
-        id_producto,
-
-        cantidad,
-
-        tipo_movimiento:tipo,
-
-        precio_entrada,
-
-        precio_venta
-
-      })
-
-    });
-
-
-  }catch(error){
-
-    console.error(error);
-
-  }
 
 };
 
@@ -234,8 +193,6 @@ setPrecioSalida(prod.precio_salida || "");
 
 setStock(prod.stock_minimo || "");
 
-setStockAnterior(prod.stock_minimo || "");
-
 setProveedor(obtenerIdProveedorProducto(prod));
 
 
@@ -300,8 +257,6 @@ setPrecioCompra("");
 setPrecioSalida("");
 
 setStock("");
-
-setStockAnterior("");
 
 setProveedor("");
 

@@ -1,9 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps, no-unused-vars */
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './Facturas.css';
 
 function Facturas() {
-  const navigate = useNavigate();
 
   const [productos, setProductos] = useState([]);
   const [clientes, setClientes] = useState([]);
@@ -15,10 +14,9 @@ function Facturas() {
   const [cargando, setCargando] = useState(false);
   const [guardando, setGuardando] = useState(false);
 
-  const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-  const rol = usuario.rol || '';
-  const esGerente = rol === 'Gerente 1';
+  const usuario = JSON.parse(sessionStorage.getItem('usuario') || '{}');
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     cargarDatosIniciales();
 

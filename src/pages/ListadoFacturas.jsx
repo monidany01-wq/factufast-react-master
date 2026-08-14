@@ -6,7 +6,7 @@ function ListadoFacturas() {
   const [facturas, setFacturas] = useState([]);
   const [busqueda, setBusqueda] = useState("");
 
-  const usuarioObj = JSON.parse(localStorage.getItem("usuario") || "{}");
+  const usuarioObj = JSON.parse(sessionStorage.getItem("usuario") || "{}");
   const rol = usuarioObj.rol || "";
   const esGerente = rol === "Gerente 1";
 

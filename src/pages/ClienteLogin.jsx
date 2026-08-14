@@ -158,9 +158,9 @@ function ClienteLogin() {
     const data = await res.json();
 
     if (data.success) {
-      localStorage.setItem("cliente_nit", data.nit);
-      localStorage.setItem("cliente_nombre", data.nombre);
-      localStorage.setItem("cliente_id", data.id_cliente);
+      sessionStorage.setItem("cliente_nit", data.nit);
+      sessionStorage.setItem("cliente_nombre", data.nombre);
+      sessionStorage.setItem("cliente_id", data.id_cliente);
       navigate("/cliente/facturas");
     } else {
       setError(data.mensaje);

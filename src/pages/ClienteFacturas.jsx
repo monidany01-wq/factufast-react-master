@@ -4,11 +4,12 @@ import React, {
 } from 'react';
 
 import { useNavigate } from 'react-router-dom';
+import { clearClienteSesion } from '../utils/session';
 
 function ClienteFacturas() {
   const navigate = useNavigate();
-  const nit = localStorage.getItem("cliente_nit");
-  const nombre = localStorage.getItem("cliente_nombre");
+  const nit = sessionStorage.getItem("cliente_nit");
+  const nombre = sessionStorage.getItem("cliente_nombre");
   const [facturas, setFacturas] = useState([]);
 
   useEffect(() => {
@@ -20,10 +21,8 @@ function ClienteFacturas() {
 
   const cerrarSesion = () => {
     if (!window.confirm("¿Estás seguro que deseas cerrar sesión?")) return;
-    localStorage.removeItem("cliente_nit");
-    localStorage.removeItem("cliente_nombre");
-    localStorage.removeItem("cliente_id");
-    navigate("/cliente/login");
+    clearClienteSesion();
+    navigate("/cliente/login", { replace: true });
   };
 
   return (

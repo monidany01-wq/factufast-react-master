@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 
 import {
@@ -16,7 +17,6 @@ import ClienteFacturas from './pages/ClienteFacturas';
 import ClienteLogin from './pages/ClienteLogin';
 import Clientes from './pages/Clientes';
 import Configuracion from './pages/Configuracion';
-import Dashboard from './pages/Dashboard';
 import FacturaAnular from './pages/FacturaAnular';
 import Facturas from './pages/Facturas';
 import FacturaVista from './pages/FacturaVista';

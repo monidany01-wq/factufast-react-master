@@ -1,4 +1,5 @@
-import React,{useEffect,useMemo,useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps, no-unused-vars */
+import React,{useCallback,useEffect,useMemo,useState} from 'react';
 
 import {
 BarElement,
@@ -40,7 +41,6 @@ ganancia_total:0
 
 const [ganancias,setGanancias]=useState([]);
 const [stockBajo,setStockBajo]=useState([]);
-const [facturasAll,setFacturasAll]=useState([]);
 const [facturasFiltradas,setFacturasFiltradas]=useState([]);
 
 const [resumenFacturas,setResumenFacturas]=useState({
@@ -52,7 +52,6 @@ const [fechaInicio,setFechaInicio]=useState('');
 const [fechaFin,setFechaFin]=useState('');
 
 const [cargando,setCargando]=useState(true);
-const [cargandoFacturas,setCargandoFacturas]=useState(false);
 const [error,setError]=useState('');
 
 
@@ -133,9 +132,6 @@ cantidad_facturas:activas.length
 const cargarFacturasPorFecha=async()=>{
 
 
-setCargandoFacturas(true);
-
-
 try{
 
 
@@ -170,8 +166,6 @@ return true;
 });
 
 
-setFacturasAll(todas);
-
 setFacturasFiltradas(filtradas);
 
 setResumenFacturas(
@@ -185,29 +179,22 @@ setFacturasFiltradas([]);
 
 }finally{
 
-setCargandoFacturas(false);
-
 }
 
 };
 
 
 
-const actualizarReportes=async()=>{
-
+const actualizarReportes=useCallback(async()=>{
 await Promise.all([
 cargarReportes(),
 cargarFacturasPorFecha()
 ]);
-
-};
-
+}, [fechaInicio, fechaFin]);
 
 useEffect(()=>{
-
 actualizarReportes();
-
-},[fechaInicio,fechaFin]);
+}, [actualizarReportes]);
 
 
 

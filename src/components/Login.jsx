@@ -2,6 +2,7 @@ import './Login.css';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
+import { setUsuarioSesion } from '../utils/session';
 
 function Login(){
 
@@ -43,10 +44,7 @@ nombre:data.nombre_usuario,
 rol:data.nombre_rol
 };
 
-localStorage.setItem(
-"usuario",
-JSON.stringify(usuarioObj)
-);
+setUsuarioSesion(usuarioObj);
 
 if(data.nombre_rol==="Gerente 1"){
 

@@ -1,30 +1,23 @@
+/* eslint-disable no-unused-vars */
 import "./Sidebar.css";
 import { useState } from "react";
 import {
   NavLink,
-  useNavigate,
 } from 'react-router-dom';
+import { getUsuarioSesion } from '../utils/session';
 
 function Sidebar() {
   const [menuAbierto, setMenuAbierto] = useState(false);
-  const navigate = useNavigate();
-  const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
+  const usuario = getUsuarioSesion() || {};
   const rol = usuario.rol || "";
 
   const esGerente      = rol === "Gerente 1";
   const esAdmin        = rol === "Administrador";
   const esEmpleado     = rol === "Empleado";
 
-  // Base de ruta según rol
   const base = esGerente ? "/gerente" : esAdmin ? "/admin" : "/empleado";
 
-  const cerrarSesion = () => {
-    if (!window.confirm("¿Estás seguro que deseas cerrar sesión?")) return;
-    localStorage.removeItem("usuario");
-    navigate("/login");
-  };
-
-const toggleMenu = () => setMenuAbierto(!menuAbierto);
+  const toggleMenu = () => setMenuAbierto(!menuAbierto);
 
 return (
   <>
@@ -77,7 +70,6 @@ return (
             <NavLink style={estiloLink} to={`${base}/facturas`}>🧾Facturas</NavLink>
             <NavLink style={estiloLink} to={`${base}/listado-facturas`}>📄Listado Facturas</NavLink>
             <NavLink style={estiloLink} to={`${base}/reportes`}>📊Reportes</NavLink>
-            <NavLink style={estiloLink} to={`${base}/configuracion`}>⚙️Usuarios</NavLink>
           </>
         )}
 

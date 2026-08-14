@@ -11,7 +11,7 @@ import {
 function ClienteFacturaDetalle() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const nombre = localStorage.getItem("cliente_nombre");
+  const nombre = sessionStorage.getItem("cliente_nombre");
   const [factura, setFactura] = useState(null);
   const [detalle, setDetalle] = useState([]);
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
@@ -12,21 +13,20 @@ function Inventario() {
   const [producto,setProducto] = useState("");
   const [productoTexto,setProductoTexto] = useState("");
   const [cantidad,setCantidad] = useState("");
-  const [tipo,setTipo] = useState("entrada");
+  const [productoFiltro,setProductoFiltro] = useState("");
 
   const [precioCompra,setPrecioCompra] = useState("");
   const [precioVenta,setPrecioVenta] = useState("");
 
   const [idMovimiento,setIdMovimiento] = useState(null);
 
-  const [productoFiltro,setProductoFiltro] = useState("");
   const [fechaInicio,setFechaInicio] = useState("");
   const [fechaFin,setFechaFin] = useState("");
   const [busqueda,setBusqueda] = useState("");
   const [sugerencias,setSugerencias] = useState([]);
 
 
-  const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
+  const usuario = JSON.parse(sessionStorage.getItem("usuario") || "{}");
   const rol = usuario.rol || "";
 
   const esEmpleado = rol === "Empleado";

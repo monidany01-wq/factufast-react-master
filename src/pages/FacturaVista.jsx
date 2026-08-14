@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import './FacturaVista.css';
 
 import React, {
@@ -11,6 +12,7 @@ import { QRCodeCanvas } from 'qrcode.react';
 import { useParams } from 'react-router-dom';
 
 import logo from '../assets/logo.png';
+import { getAppBaseUrl } from '../utils/publicUrl';
 
 function FacturaVista() {
 
@@ -18,9 +20,10 @@ function FacturaVista() {
 
   const [factura, setFactura] = useState(null);
   const [detalle, setDetalle] = useState([]);
-  const [enviando, setEnviando] = useState(false);
 
   const numeroFactura = `FAC-${String(id).padStart(4, "0")}`;
+  const baseUrl = getAppBaseUrl();
+  const facturaUrl = `${baseUrl}/factura/${id}`;
 
   useEffect(() => {
 
@@ -86,14 +89,13 @@ function FacturaVista() {
   // 🔥 ENVIAR POR WHATSAPP
   const enviarWhatsApp = () => {
     const telefono = (factura.telefono_cliente || factura.celular_cliente || "").replace(/\D/g, "");
-    const facturaUrl = `${window.location.origin}/factura/${id}`;
     const mensaje = encodeURIComponent(`Hola ${factura.nombre_cliente || "cliente"}, te comparto la factura ${numeroFactura}.\n\nPuedes verla aquí: ${facturaUrl}\n\nGracias por tu compra.`);
 
-    const baseUrl = telefono
+    const baseUrlWhatsApp = telefono
       ? `https://api.whatsapp.com/send?phone=${telefono}&text=${mensaje}`
       : `https://api.whatsapp.com/send?text=${mensaje}`;
 
-    window.open(baseUrl, "_blank");
+    window.open(baseUrlWhatsApp, "_blank");
   };
 
   if (!factura) {
@@ -219,7 +221,7 @@ function FacturaVista() {
         </div>
 
         <QRCodeCanvas
-          value={`http://localhost:3000/factura/${factura.id_factura}`}
+          value={facturaUrl}
           size={100}
         />
       </div>

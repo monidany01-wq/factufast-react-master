@@ -1,12 +1,13 @@
 import { Navigate } from 'react-router-dom';
+import { getUsuarioSesion } from '../utils/session';
 
 function PrivateRoute({ children, rolPermitido }) {
-  const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
+  const usuario = getUsuarioSesion();
 
-  if (!usuario) return <Navigate to="/login" />;
+  if (!usuario) return <Navigate to="/login" replace />;
 
   if (rolPermitido && usuario.rol !== rolPermitido) {
-    return <Navigate to="/sin-permiso" />;
+    return <Navigate to="/sin-permiso" replace />;
   }
 
   return children;
