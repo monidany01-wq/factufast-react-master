@@ -7,8 +7,11 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
+import '../layout/layout.css';
 
 function ClienteFacturaDetalle() {
+  const numeroWhatsApp = '573144571556';
+  const mensajeWhatsApp = encodeURIComponent('Hola, necesito ayuda con FACTUFAST.');
   const { id } = useParams();
   const navigate = useNavigate();
   const nombre = sessionStorage.getItem("cliente_nombre");
@@ -160,6 +163,17 @@ function ClienteFacturaDetalle() {
           ${total.toLocaleString("es-CO")}
         </p>
       </div>
+
+      <a
+        href={`https://wa.me/${numeroWhatsApp}?text=${mensajeWhatsApp}`}
+        target="_blank"
+        rel="noreferrer"
+        className="whatsapp-help-button"
+        aria-label="Solicitar ayuda por WhatsApp"
+      >
+        <span className="whatsapp-help-icon">✆</span>
+        <span className="whatsapp-help-text">Ayuda</span>
+      </a>
 
     </div>
   );

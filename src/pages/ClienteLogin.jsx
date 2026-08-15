@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../layout/layout.css';
 import logo from '../assets/logo.png';
 
 function ClienteLogin() {
+  const numeroWhatsApp = '573144571556';
+  const mensajeWhatsApp = encodeURIComponent('Hola, necesito ayuda con FACTUFAST.');
   const navigate = useNavigate();
   const [nit, setNit] = useState("");
   const [correo, setCorreo] = useState("");
@@ -413,6 +416,17 @@ function ClienteLogin() {
         )}
 
       </div>
+
+      <a
+        href={`https://wa.me/${numeroWhatsApp}?text=${mensajeWhatsApp}`}
+        target="_blank"
+        rel="noreferrer"
+        className="whatsapp-help-button"
+        aria-label="Solicitar ayuda por WhatsApp"
+      >
+        <span className="whatsapp-help-icon">✆</span>
+        <span className="whatsapp-help-text">Ayuda</span>
+      </a>
     </div>
   );
 }
