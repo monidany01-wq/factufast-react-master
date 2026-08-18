@@ -12,6 +12,7 @@ $sql_inventario = "
 SELECT 
 p.id_productos,
 p.nombre_producto,
+pr.nombre_proveedor,
 p.iva,
 
 IFNULL(SUM(
@@ -32,10 +33,13 @@ END
 
 FROM tabla_productos p
 
+LEFT JOIN tabla_proveedor pr
+ON p.id_proveedor = pr.id_proveedor
+
 LEFT JOIN tabla_inventario i
 ON p.id_productos=i.id_productos
 
-GROUP BY p.id_productos,p.nombre_producto,p.iva
+GROUP BY p.id_productos,p.nombre_producto,pr.nombre_proveedor,p.iva
 
 ORDER BY p.nombre_producto
 
@@ -57,6 +61,7 @@ SELECT
 i.id_movimiento,
 i.id_productos,
 p.nombre_producto,
+pr.nombre_proveedor,
 i.cantidad,
 i.tipo_movimiento,
 i.precio_entrada,
@@ -68,6 +73,9 @@ FROM tabla_inventario i
 
 INNER JOIN tabla_productos p
 ON p.id_productos = i.id_productos
+
+LEFT JOIN tabla_proveedor pr
+ON p.id_proveedor = pr.id_proveedor
 
 ORDER BY i.fecha_movimiento DESC
 
