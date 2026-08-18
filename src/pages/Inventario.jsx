@@ -385,6 +385,7 @@ function Inventario() {
 
   worksheet.columns = [
     { header: "Producto", key: "producto", width: 30 },
+    { header: "Proveedor", key: "proveedor", width: 30 },
     { header: "Cantidad", key: "cantidad", width: 15 },
     { header: "Tipo", key: "tipo", width: 15 },
     { header: "Precio Compra", key: "compra", width: 20 },
@@ -415,6 +416,7 @@ function Inventario() {
 
     worksheet.addRow({
       producto: mov.nombre_producto,
+      proveedor: mov.nombre_proveedor || "Sin proveedor",
       cantidad: mov.cantidad,
       tipo: mov.tipo_movimiento,
       compra,
@@ -634,6 +636,8 @@ Guardar
 
 <th>Producto</th>
 
+<th>Proveedor</th>
+
 <th>Stock Actual</th>
 
 </tr>
@@ -649,6 +653,8 @@ Guardar
 <tr key={i}>
 
 <td>{prod.nombre_producto}</td>
+
+<td>{prod.nombre_proveedor || "Sin proveedor"}</td>
 
 <td>{prod.stock}</td>
 
@@ -693,6 +699,8 @@ style={{
 <tr>
 
 <th>Producto</th>
+
+<th>Proveedor</th>
 
 <th>Cantidad</th>
 
@@ -744,6 +752,8 @@ return(
 
 
 <td>{mov.nombre_producto}</td>
+
+<td>{mov.nombre_proveedor || "Sin proveedor"}</td>
 
 <td>{mov.cantidad}</td>
 

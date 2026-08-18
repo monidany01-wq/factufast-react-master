@@ -74,10 +74,10 @@ function App() {
         <Route path="/factura/:id" element={<FacturaVista />} />
 
         <Route path="/factura/anular/:id" element={
-          <PrivateRoute rolPermitido="Gerente 1">
-            <FacturaAnular />
-          </PrivateRoute>
-        } />
+  <PrivateRoute>
+    <FacturaAnular />
+  </PrivateRoute>
+} />
 
         {/* 🧑‍💼 PANEL GERENTE */}
         <Route path="/gerente" element={
