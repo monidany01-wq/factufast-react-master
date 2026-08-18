@@ -50,7 +50,11 @@ const obtenerProveedores = ()=>{
 
   fetch("http://localhost/factufast-api/proveedores/listar.php")
   .then(res=>res.json())
-  .then(data=>setProveedores(data || []));
+  .then(data =>
+  setProveedores(
+    (data || []).filter(prov => (prov.estado || "activo") === "activo")
+  )
+);
 
 };
 
@@ -174,7 +178,34 @@ obtenerProductos();
 
 };
 
+const cambiarEstadoProducto = (prod) => {
+  const nuevoEstado = (prod.estado || "activo") === "activo" ? "inactivo" : "activo";
+  
+  if (!window.confirm(`¿Cambiar estado a ${nuevoEstado}?`)) return;
 
+  fetch("http://localhost/factufast-api/productos/cambiar-estado.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      id_productos: prod.id_productos,
+      estado: nuevoEstado
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      obtenerProductos();
+    } else {
+      alert(data.error || "Error cambiando estado");
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Error cambiando estado del producto");
+  });
+};
 
 const editarProducto = (prod)=>{
 
@@ -452,153 +483,31 @@ style={{
 
 
 <table>
-
-
-<thead>
-
-<tr>
-
-<th>ID</th>
-
-<th>Nombre</th>
-
-<th>Descripción</th>
-
-<th>Precio entrada</th>
-
-<th>Precio venta</th>
-
-<th>Stock</th>
-
-<th>Proveedor</th>
-
-<th>Acciones</th>
-
-</tr>
-
-</thead>
-
-
-
-<tbody>
-
-
-{productosFiltrados.length ? (
-
-
-productosFiltrados.map((prod)=>(
-
-
-<tr key={prod.id_productos}>
-
-
-<td>{prod.id_productos}</td>
-
-
-<td>{prod.nombre_producto}</td>
-
-
-<td>{prod.descripcion_producto}</td>
-
-
-<td>
-
-${Number(
-prod.precio_compra ?? 0
-).toLocaleString("es-CO")}
-
-</td>
-
-
-<td>
-
-${Number(
-prod.precio_salida ?? 0
-).toLocaleString("es-CO")}
-
-</td>
-
-
-<td>
-
-{prod.stock_minimo}
-
-</td>
-
-
-<td>
-
-{prod.nombre_proveedor}
-
-</td>
-
-
-
-<td>
-
-
-<button
-
-type="button"
-
-onClick={()=>editarProducto(prod)}
-
->
-
-Editar
-
-</button>
-
-
-
-<button
-
-type="button"
-
-className="btn-danger"
-
-onClick={()=>eliminarProducto(prod.id_productos)}
-
-style={{marginLeft:"6px"}}
-
->
-
-Eliminar
-
-</button>
-
-
-</td>
-
-
-</tr>
-
-
-))
-
-
-) : (
-
-
-<tr>
-
-<td colSpan="8">
-
-No hay productos para mostrar
-
-</td>
-
-</tr>
-
-
-)}
-
-
-
-</tbody>
-
-
+  <thead>
+    <tr>
+      <th>Producto</th>
+      <th>Detalle</th>
+      <th>Stock</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {productosFiltrados.length ? (
+      productosFiltrados.map((prod) => (
+        <tr key={prod.id_productos}>
+          <td>{prod.nombre_producto}</td>
+          <td>{prod.descripcion_producto}</td>
+          <td>{prod.stock}</td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan="3">No hay productos para mostrar</td>
+      </tr>
+    )}
+  </tbody>
 </table>
+
 
 
 

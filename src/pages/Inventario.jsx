@@ -698,14 +698,13 @@ style={{
 
 <th>Tipo</th>
 
-<th>Compra</th>
+{!esEmpleado && <th>Compra</th>}
 
 <th>Venta</th>
 
-<th>Ganancia</th>
+{!esEmpleado && <th>Ganancia</th>}
 
 <th>Fecha</th>
-
 
 {puedeEditarHistorial && <th>Acciones</th>}
 
@@ -750,25 +749,25 @@ return(
 
 <td>{mov.tipo_movimiento}</td>
 
-<td>
-${compra.toLocaleString("es-CO")}
-</td>
+{!esEmpleado && (
+  <td>
+    ${compra.toLocaleString("es-CO")}
+  </td>
+)}
 
 <td>
 ${venta.toLocaleString("es-CO")}
 </td>
 
-
-<td>
-${ganancia.toLocaleString("es-CO")}
-</td>
-
+{!esEmpleado && (
+  <td>
+    ${ganancia.toLocaleString("es-CO")}
+  </td>
+)}
 
 <td>
 {mov.fecha_movimiento}
 </td>
-
-
 
 {puedeEditarHistorial && mov.tipo_movimiento !== "salida" && (
 
@@ -778,16 +777,15 @@ ${ganancia.toLocaleString("es-CO")}
 Editar
 </button>
 
-
 <button
-className="btn-danger"
-onClick={()=>eliminarMovimiento(mov.id_movimiento)}
+  className="btn-danger"
+  onClick={()=>eliminarMovimiento(mov.id_movimiento)}
+  style={{marginLeft:"6px"}}
 >
 
 Eliminar
 
 </button>
-
 
 </td>
 

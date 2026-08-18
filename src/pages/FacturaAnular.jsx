@@ -18,6 +18,12 @@ function FacturaAnular() {
 
   const [factura, setFactura] = useState(null);
   const [detalle, setDetalle] = useState([]);
+  const [motivoAnulacion, setMotivoAnulacion] = useState('');
+  const [mostrarModalMotivo, setMostrarModalMotivo] = useState(false);
+
+  const usuarioObj = JSON.parse(sessionStorage.getItem('usuario') || '{}');
+  const usuarioId = usuarioObj.id || usuarioObj.id_usuario;
+  const usuarioNombre = usuarioObj.nombre || usuarioObj.nombre_usuario;
 
   const cargarFactura = useCallback(() => {
     fetch(`http://localhost/factufast-api/facturas/detalle.php?id=${id}`)
@@ -72,11 +78,26 @@ function FacturaAnular() {
       return;
     }
 
+    if (!motivoAnulacion.trim()) {
+      alert("Por favor ingresa el motivo de anulación");
+      return;
+    }
+
     const confirmar = window.confirm("¿Seguro que deseas anular esta factura?");
     if (!confirmar) return;
 
     try {
-      const res = await fetch(`http://localhost/factufast-api/facturas/anular.php?id=${id}`);
+      const res = await fetch(`http://localhost/factufast-api/facturas/anular.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: id,
+          motivo_anulacion: motivoAnulacion,
+          usuario_id: usuarioId,
+          usuario_nombre: usuarioNombre,
+          fecha_anulacion: new Date().toISOString()
+        })
+      });
       const data = await res.json();
 
       if (data.success) {
@@ -263,13 +284,29 @@ function FacturaAnular() {
         </button>
 
         {factura.estado !== "ANULADA" ? (
-          <button
-            type="button"
-            onClick={anularFactura}
-            className="btn-danger"
-          >
-            Anular factura
-          </button>
+          <>
+            <textarea
+              placeholder="Ingresa el motivo de anulación..."
+              value={motivoAnulacion}
+              onChange={(e) => setMotivoAnulacion(e.target.value)}
+              style={{
+                width: "100%",
+                minHeight: "80px",
+                padding: "10px",
+                borderRadius: "6px",
+                border: "1px solid #ddd",
+                fontFamily: "Arial, Helvetica, sans-serif",
+                marginBottom: "10px"
+              }}
+            />
+            <button
+              type="button"
+              onClick={anularFactura}
+              className="btn-danger"
+            >
+              Anular factura
+            </button>
+          </>
         ) : (
           <span style={{
             color: "#991b1b",

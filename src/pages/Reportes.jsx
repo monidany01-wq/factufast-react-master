@@ -54,6 +54,8 @@ const [fechaFin,setFechaFin]=useState('');
 const [cargando,setCargando]=useState(true);
 const [error,setError]=useState('');
 
+const [todosProductos,setTodosProductos]=useState([]);
+
 
 const cargarReportes=async()=>{
 
@@ -84,13 +86,33 @@ Array.isArray(data?.ganancias)
 :[]
 );
 
+// Obtener stock bajo del API y complementar con productos con stock = 0
+const stockBajoAPI = Array.isArray(data?.stock_bajo) ? data.stock_bajo : [];
 
-setStockBajo(
-Array.isArray(data?.stock_bajo)
-?data.stock_bajo
-:[]
-);
-
+// También cargar todos los productos del inventario para detectar stock = 0
+try {
+  const invResp = await fetch("http://localhost/factufast-api/inventario/listar.php");
+  const invData = await invResp.json();
+  const todosProds = Array.isArray(invData?.inventario) ? invData.inventario : [];
+  
+  setTodosProductos(todosProds);
+  
+  // Filtrar productos con stock = 0
+  const productosSinStock = todosProds.filter(p => Number(p.stock || 0) === 0);
+  
+  // Combinar stock bajo del API con productos sin stock
+  const stockBajoCombinado = [...stockBajoAPI];
+  productosSinStock.forEach(p => {
+    if (!stockBajoCombinado.find(sb => sb.id_productos === p.id_productos)) {
+      stockBajoCombinado.push(p);
+    }
+  });
+  
+  setStockBajo(stockBajoCombinado);
+} catch (invErr) {
+  console.error("Error cargando inventario:", invErr);
+  setStockBajo(stockBajoAPI);
+}
 
 }catch(err){
 
@@ -421,51 +443,67 @@ Descargar reporte de facturas
 <article>
 
 <span>
-Valor total inventario
+💾 Valor del inventario
 </span>
 
 <strong>
 {formatoMoneda(totales.valor_inventario)}
 </strong>
 
+<small style={{fontSize: '12px', color: '#666', marginTop: '4px', display: 'block'}}>
+Valor total de los productos disponibles en inventario.
+</small>
+
 </article>
 
 
 <article>
 
 <span>
-Ganancia total
+💰 Ganancias generadas
 </span>
 
 <strong>
 {formatoMoneda(totales.ganancia_total)}
 </strong>
 
+<small style={{fontSize: '12px', color: '#666', marginTop: '4px', display: 'block'}}>
+Ganancia obtenida por las ventas realizadas.
+</small>
+
 </article>
 
 
 <article>
 
 <span>
-Ventas totales
+🛒 Total vendido
 </span>
 
 <strong>
 {formatoMoneda(resumenFacturas.total_ventas)}
 </strong>
 
+<small style={{fontSize: '12px', color: '#666', marginTop: '4px', display: 'block'}}>
+Valor acumulado de las ventas realizadas.
+</small>
+
 </article>
 
 
 <article>
 
 <span>
-Cantidad facturas
+🧾 Facturas realizadas
 </span>
 
 <strong>
 {resumenFacturas.cantidad_facturas}
 </strong>
+
+<small style={{fontSize: '12px', color: '#666', marginTop: '4px', display: 'block'}}>
+Cantidad de facturas registradas activas.
+</small>
 
 </article>
 
@@ -637,18 +675,29 @@ Stock
 <tbody>
 
 
-{stockBajo.map((p)=>(
+{stockBajo.length > 0 ? (
+
+stockBajo.map((p)=>(
 
 
-<tr key={p.nombre_producto}>
+<tr key={p.nombre_producto || p.id_productos} style={{
+  backgroundColor: Number(p.stock || 0) === 0 ? "#fee2e2" : "#fef3c7"
+}}>
 
 
-<td>
+<td style={{
+  fontWeight: Number(p.stock || 0) === 0 ? "bold" : "normal",
+  color: Number(p.stock || 0) === 0 ? "#991b1b" : "#92400e"
+}}>
 {p.nombre_producto}
+{Number(p.stock || 0) === 0 && " ⚠️ AGOTADO"}
 </td>
 
 
-<td>
+<td style={{
+  fontWeight: "bold",
+  color: Number(p.stock || 0) === 0 ? "#991b1b" : "#92400e"
+}}>
 {p.stock}
 </td>
 
@@ -656,7 +705,17 @@ Stock
 </tr>
 
 
-))}
+))
+
+) : (
+
+<tr>
+<td colSpan="2" style={{textAlign: "center", color: "#22c55e", fontWeight: "bold"}}>
+✓ No hay productos con stock bajo
+</td>
+</tr>
+
+)}
 
 
 </tbody>

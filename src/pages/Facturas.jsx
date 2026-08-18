@@ -40,15 +40,23 @@ function Facturas() {
   };
 
   const cargarProductos = async () => {
-    const res = await fetch('http://localhost/factufast-api/inventario/listar.php');
+    const res = await fetch('http://localhost/factufast-api/productos/listar.php');
     const data = await res.json();
-    setProductos(Array.isArray(data.inventario) ? data.inventario : []);
+    // Filtrar solo productos activos
+    const productosActivos = Array.isArray(data) 
+      ? data.filter(p => (p.estado || 'activo') === 'activo')
+      : [];
+    setProductos(productosActivos);
   };
 
   const cargarClientes = async () => {
     const res = await fetch('http://localhost/factufast-api/clientes/listar.php');
     const data = await res.json();
-    setClientes(Array.isArray(data) ? data : []);
+    setClientes(
+  Array.isArray(data)
+    ? data.filter(cliente => (cliente.estado || "activo") === "activo")
+    : []
+);
   };
 
   const formato = (num) => Number(num || 0).toLocaleString('es-CO');
@@ -66,7 +74,9 @@ function Facturas() {
     return !Number.isNaN(ivaNormalizado) && ivaNormalizado > 0 && ivaNormalizado <= 1;
   };
 
-  const productosDisponibles = productos.filter((p) => Number(p.stock || 0) > 0);
+  const productosDisponibles = productos.filter((p) => 
+    (p.estado || 'activo') === 'activo' && Number(p.stock || 0) > 0
+  );
   const clientesFiltrados = clientes.filter((c) =>
   String(c.nombre_cliente || '')
     .toLowerCase()
@@ -78,6 +88,11 @@ function Facturas() {
     const prod = productos.find((p) => String(p.id_productos) === String(id));
 
     if (!prod) return;
+
+    if ((prod.estado || 'activo') !== 'activo') {
+      alert('Este producto está desactivado y no puede ser vendido');
+      return;
+    }
 
     if (!validarIvaProducto(prod.iva)) {
       alert('IVA inválido para este producto');

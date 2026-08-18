@@ -136,6 +136,40 @@ function Proveedores() {
     .catch(() => alert('Error eliminando proveedor'));
 };
 
+  const cambiarEstadoProveedor = (prov) => {
+    if(prov.nombre_proveedor === "PROVEEDOR GENERAL"){
+      alert("No se puede cambiar estado del Proveedor General");
+      return;
+    }
+
+    const nuevoEstado = (prov.estado || "activo") === "activo" ? "inactivo" : "activo";
+    
+    if (!window.confirm(`¿Cambiar estado a ${nuevoEstado}?`)) return;
+
+    fetch("http://localhost/factufast-api/proveedores/cambiar-estado.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id_proveedor: prov.id_proveedor,
+        estado: nuevoEstado
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        obtenerProveedores();
+      } else {
+        alert(data.error || "Error cambiando estado");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Error cambiando estado del proveedor");
+    });
+  };
+
   const editarProveedor = (prov) => {
 
   if(prov.nombre_proveedor === "PROVEEDOR GENERAL"){
@@ -293,6 +327,7 @@ function Proveedores() {
             <th>Dirección</th>
             <th>Correo</th>
             <th>Teléfono</th>
+            <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -300,7 +335,7 @@ function Proveedores() {
         <tbody>
           {cargando ? (
             <tr>
-              <td colSpan="8">Cargando proveedores...</td>
+              <td colSpan="9">Cargando proveedores...</td>
             </tr>
           ) : proveedoresFiltrados.length ? (
             proveedoresFiltrados.map((prov) => (
@@ -312,6 +347,12 @@ function Proveedores() {
                 <td>{prov.direccion_proveedor}</td>
                 <td>{prov.correo_proveedor}</td>
                 <td>{prov.telefono_proveedor}</td>
+                <td style={{
+                  color: (prov.estado || "activo") === "activo" ? "#22c55e" : "#ef4444",
+                  fontWeight: "bold"
+                }}>
+                  {(prov.estado || "activo").toUpperCase()}
+                </td>
                 <td>
 
   {prov.nombre_proveedor !== "PROVEEDOR GENERAL" && (
@@ -324,12 +365,14 @@ function Proveedores() {
       </button>
 
       <button
-        type="button"
-        className="btn-danger"
-        onClick={() => eliminarProveedor(prov.id_proveedor)}
-        style={{ marginLeft: '6px' }}
+        onClick={() => cambiarEstadoProveedor(prov)}
+        style={{
+          marginLeft: '6px',
+          backgroundColor: (prov.estado || "activo") === "activo" ? "#ef4444" : "#22c55e",
+          color: "white"
+        }}
       >
-        Eliminar
+        {(prov.estado || "activo") === "activo" ? "Desactivar" : "Activar"}
       </button>
     </>
   )}
@@ -339,7 +382,7 @@ function Proveedores() {
             ))
           ) : (
             <tr>
-              <td colSpan="8">No hay proveedores para mostrar</td>
+              <td colSpan="9">No hay proveedores para mostrar</td>
             </tr>
           )}
         </tbody>

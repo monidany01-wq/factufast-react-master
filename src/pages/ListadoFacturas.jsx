@@ -5,10 +5,12 @@ function ListadoFacturas() {
 
   const [facturas, setFacturas] = useState([]);
   const [busqueda, setBusqueda] = useState("");
+  const [mostrarModalMotivo, setMostrarModalMotivo] = useState(false);
+  const [motivoSeleccionado, setMotivoSeleccionado] = useState(null);
 
   const usuarioObj = JSON.parse(sessionStorage.getItem("usuario") || "{}");
   const rol = usuarioObj.rol || "";
-  const esGerente = rol === "Gerente 1";
+  const puedeAnular = ["Gerente 1", "Administrador", "Empleado"].includes(rol);
 
   const listarFacturas = () => {
 
@@ -36,6 +38,11 @@ function ListadoFacturas() {
 
   const abrirAnularFactura = (idFactura) => {
     window.open(`/factura/anular/${idFactura}`, "_blank");
+  };
+
+  const verMotivo = (factura) => {
+    setMotivoSeleccionado(factura);
+    setMostrarModalMotivo(true);
   };
 
 
@@ -158,7 +165,7 @@ style={{
 
 
 
-              {esGerente && f.estado !== "ANULADA" && (
+              {puedeAnular && f.estado !== "ANULADA" && (
 
                 <button
 
@@ -182,14 +189,24 @@ style={{
 
               {f.estado === "ANULADA" && (
 
-                <span style={{
-                  color:"red",
-                  marginLeft:"10px"
-                }}>
-
-                  ANULADA
-
-                </span>
+                <>
+                  <button
+                    onClick={() => verMotivo(f)}
+                    style={{
+                      backgroundColor: "#475569",
+                      color:"white",
+                      marginLeft:"5px",
+                      padding: "6px 10px",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      fontSize: "12px"
+                    }}
+                    title="Ver motivo de anulación"
+                  >
+                    👁️ Ver motivo
+                  </button>
+                </>
 
               )}
 
@@ -207,6 +224,63 @@ style={{
 
       </table>
 
+      {mostrarModalMotivo && motivoSeleccionado && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: "white",
+            borderRadius: "8px",
+            padding: "30px",
+            maxWidth: "500px",
+            width: "90%",
+            boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)"
+          }}>
+            <h2 style={{ marginTop: 0, marginBottom: "20px" }}>
+              Motivo de Anulación
+            </h2>
+            <p><strong>Factura #:</strong> {motivoSeleccionado.id_factura}</p>
+            <p><strong>Cliente:</strong> {motivoSeleccionado.nombre_cliente}</p>
+            <p><strong>Anulada por:</strong> {motivoSeleccionado.usuario_anula || "No registrado"}</p>
+            <p><strong>Fecha de anulación:</strong> {motivoSeleccionado.fecha_anulacion || "No registrada"}</p>
+            <div style={{
+              backgroundColor: "#f3f4f6",
+              padding: "15px",
+              borderRadius: "6px",
+              marginTop: "15px"
+            }}>
+              <p><strong>Motivo:</strong></p>
+              <p style={{ marginTop: "10px", whiteSpace: "pre-wrap" }}>
+                {motivoSeleccionado.motivo_anulacion || "No se especificó motivo"}
+              </p>
+            </div>
+            <button
+              onClick={() => setMostrarModalMotivo(false)}
+              style={{
+                marginTop: "20px",
+                padding: "10px 20px",
+                backgroundColor: "#3b82f6",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+                width: "100%"
+              }}
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
 
     </div>
 

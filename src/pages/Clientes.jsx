@@ -163,6 +163,40 @@ function Clientes(){
 
 }
 
+const cambiarEstadoCliente = (cliente) => {
+
+  if(cliente.nombre_cliente === "CONSUMIDOR FINAL"){
+    alert("No se puede cambiar estado del cliente Consumidor Final");
+    return;
+  }
+
+  const nuevoEstado = (cliente.estado || "activo") === "activo" ? "inactivo" : "activo";
+  
+  if (!window.confirm(`¿Cambiar estado a ${nuevoEstado}?`)) return;
+
+  fetch("http://localhost/factufast-api/clientes/cambiar-estado.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      id_cliente: cliente.id_cliente,
+      estado: nuevoEstado
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      listarClientes();
+    } else {
+      alert(data.error || "Error cambiando estado");
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Error cambiando estado del cliente");
+  });
+};
 
   function editarCliente(cliente){
 
@@ -363,6 +397,7 @@ style={{
             <th>Correo</th>
             <th>Direccion</th>
             <th>Ciudad</th>
+            <th>Estado</th>
             <th>Acciones</th>
           </tr>
 
@@ -384,6 +419,13 @@ style={{
               <td>{cliente.direccion_cliente}</td>
               <td>{cliente.ciudad_cliente || ""}</td>
 
+              <td style={{
+                color: (cliente.estado || "activo") === "activo" ? "#22c55e" : "#ef4444",
+                fontWeight: "bold"
+              }}>
+                {(cliente.estado || "activo").toUpperCase()}
+              </td>
+
               <td>
 
   {cliente.nombre_cliente !== "CONSUMIDOR FINAL" && (
@@ -393,10 +435,14 @@ style={{
       </button>
 
       <button
-        className="btn-danger"
-        onClick={()=>eliminarCliente(cliente.id_cliente)}
+        onClick={()=>cambiarEstadoCliente(cliente)}
+        style={{
+          marginLeft: '6px',
+          backgroundColor: (cliente.estado || "activo") === "activo" ? "#ef4444" : "#22c55e",
+          color:"white"
+        }}
       >
-        Eliminar
+        {(cliente.estado || "activo") === "activo" ? "Desactivar" : "Activar"}
       </button>
     </>
   )}
@@ -410,7 +456,7 @@ style={{
 ) : (
 
 <tr>
-<td colSpan="8">
+<td colSpan="9">
 No hay clientes para mostrar
 </td>
 </tr>
