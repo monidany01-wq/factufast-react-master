@@ -61,17 +61,18 @@ return (
         )}
 
         {/* ADMINISTRADOR — menú completo sin permisos de anulación */}
-        {esAdmin && (
-          <>
-            <NavLink style={estiloLink} to={`${base}/proveedores`}>🚚Proveedores</NavLink>
-            <NavLink style={estiloLink} to={`${base}/productos`}>🛍️Productos</NavLink>
-            <NavLink style={estiloLink} to={`${base}/inventario`}>📦Inventario</NavLink>
-            <NavLink style={estiloLink} to={`${base}/clientes`}>👥Clientes</NavLink>
-            <NavLink style={estiloLink} to={`${base}/facturas`}>🧾Facturas</NavLink>
-            <NavLink style={estiloLink} to={`${base}/listado-facturas`}>📄Listado Facturas</NavLink>
-            <NavLink style={estiloLink} to={`${base}/reportes`}>📊Reportes</NavLink>
-          </>
-        )}
+{esAdmin && (
+  <>
+    <NavLink style={estiloLink} to={`${base}/proveedores`}>🚚Proveedores</NavLink>
+    <NavLink style={estiloLink} to={`${base}/productos`}>🛍️Productos</NavLink>
+    <NavLink style={estiloLink} to={`${base}/inventario`}>📦Inventario</NavLink>
+    <NavLink style={estiloLink} to={`${base}/clientes`}>👥Clientes</NavLink>
+    <NavLink style={estiloLink} to={`${base}/facturas`}>🧾Facturas</NavLink>
+    <NavLink style={estiloLink} to={`${base}/listado-facturas`}>📄Listado Facturas</NavLink>
+    <NavLink style={estiloLink} to={`${base}/reportes`}>📊Reportes</NavLink>
+    <NavLink style={estiloLink} to={`${base}/configuracion`}>⚙️Usuarios</NavLink>  {/* ← esta línea nueva */}
+  </>
+)}
 
         {/* EMPLEADO — solo consulta de inventario, clientes, facturas y listado */}
         {esEmpleado && (
